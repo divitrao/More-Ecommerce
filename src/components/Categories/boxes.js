@@ -1,14 +1,18 @@
 
 import React, { useState } from 'react';
 import { StyleSheet, View, Text, Image, FlatList } from 'react-native';
-import { Picker } from '@react-native-community/picker';
+import { Picker } from '@react-native-picker/picker';
 import { Button } from 'react-native-elements';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
-import colors from '../../assets/themes/colors';
+
+
+
 
 export default function Boxes() {
-  
+
+    const [selectedLanguage, setSelectedLanguage] = useState();
+
     const food_data = [
         {
             id:1,
@@ -16,6 +20,7 @@ export default function Boxes() {
             content:'Red Apple',
             colors:'#53B175',
             amount: '240',
+            quantity:['1kg','2kg']
         },
         {
             id:2,
@@ -23,7 +28,7 @@ export default function Boxes() {
             content: 'Banana',
             colors:'#53B175',
             amount: '240',
-            
+            quantity:['1kg','2kg']
         },
         {
             id:3,
@@ -31,7 +36,7 @@ export default function Boxes() {
             content:'Capcicum Red',
             colors:'#53B175',
             amount: '140',
-
+            quantity:['1kg','2kg']
         },
         {
             id:4,
@@ -39,103 +44,122 @@ export default function Boxes() {
             content:'Ginger',
             colors:'#53B175',
             amount: '240',
-
+            quantity:['1kg','2kg']
         },
         
     ]
-
-
-    const [selectValue, setSelectValue] = useState({})
-
-
+    
   return (
-            <FlatList 
-                style={styles.flatbox}
-                data={food_data}
-                numColumns={2}
-                renderItem={({item})=>{
-                    return(
-                        <View style={styles.content_box}>
-                            <View>
-                            <Image source={item.image}  style={styles.image} />
-                            </View>
-                            <View style={styles.content}>
-                                <Text style={styles.content_text}>{item.content}</Text>
-                                <Picker style={styles.picker}>
-                                    <Picker.Item label="1 Kg" />
-                                    <Picker.Item label="2 Kg" />
-                                </Picker>
-                                <View style={styles.amount}>
-                                    <Text>
-                                        <Icon name="rupee" size={13} style={{letterSpacing:10}}/>
-                                        <Text >{item.amount}</Text>
-                                    </Text>
-                                    <View style={styles.addToCarBtn}>
-                                        <Text>Add</Text>
-                                    <Icon  name="plus" size={10} color={'white'} />
-                                    </View>
-                                    
-                                </View>
+
+        <View style={{flex:1,backgroundColor:'white',padding:10}}>
+      
+        <FlatList 
+            columnWrapperStyle={{justifyContent:'space-between'}}
+            style={styles.flatbox}
+            data={food_data}
+            numColumns={2}
+            renderItem={({item})=>{
+            return(
+                <View style={styles.content_box}>
+                    <View>
+                    <Image source={item.image}  style={styles.image} />
+                    </View>
+                    <View style={styles.content}>
+                        <Text style={styles.content_text}>{item.content}</Text>
+                        <Picker style={styles.picker} >
+                            <Picker.Item label="1 Kg" />
+                            <Picker.Item label="2 Kg" />
+                        </Picker>
+
+                        <View style={[styles.amount],{flexDirection: 'row',alignItems:'baseline',paddingHorizontal:9}}>
+                            <Text style={{fontSize: 17, fontWeight: 'bold',}}>
+                                {/* <Icon name="rupee" size={15} style={{letterSpacing:10}}/> */}
+                                <Image resizeMode='contain'  source={require('../../assets/images/currency_b.png')} />
+                            {item.amount}
+                            </Text>
+                            <View
+                            style={{
+                                height: 25,
+                                width: 65,
+                                backgroundColor: "#F04E23",
+                                borderRadius: 5,
+                                marginLeft: 45,
+                                alignItems: 'center',
+                                justifyContent: 'space-around',
+                            }}>
+                            <Text
+                                style={{fontSize: 17, color: 'white',fontWeight:'400',}}>ADD 
+                                +
+                            </Text>
                             </View>
                         </View>
-                    )
-                }}
-            />
-    // <View style={styles.container}>
-    //     <View style={styles.box}>
-    //         <View style={styles.inner}>
-    //             <View >
-    //                 <Image  style={styles.image} resizeMode='contain' source={require('../../assets/images/apple.png')} />
-    //             </View>
-    //             <Text style={styles.textTitle}>Red Apple</Text>
-    //             <Text style={styles.textSubtitle}>1 Kg</Text>
-    //             <Picker style={{width:'100%'}}>
-    //                 <Picker.Item label="spanish" />
-    //                 <Picker.Item label="english" />
-    //             </Picker>
-    //         </View>   
-    //     </View>
-
-    //     <View style={styles.box}>
-    //         <View style={styles.inner}>
-
-    //             <Text >Box 2</Text>
-    //         </View>   
-    //     </View>
-    //     <View style={styles.box}>
-    //         <View style={styles.inner}>
-    //             <Text>Box 3</Text>
-    //         </View>   
-    //     </View>
-    //             <View style={styles.box}>
-    //         <View style={styles.inner}>
-    //             <Text>Box 4</Text>
-    //         </View>   
-    //     </View>
 
 
-    // </View>
-  );
+
+                        {/* <View style={styles.amount}>
+                            <Text>
+                                <Icon name="rupee" size={20} style={{letterSpacing:10}}/>
+                                <Text >{item.amount}</Text>
+                            </Text>
+                            <View
+                                style={{
+                                    height: 25,
+                                    width: 25,
+                                    backgroundColor: 'green',
+                                    borderRadius: 5,
+                                    justifyContent: 'center',
+                                    alignItems: 'center',
+                                }}>
+                                <Text
+                                    style={{fontSize: 22, color: 'white', fontWeight: 'bold'}}>
+                                    +
+                                </Text>
+                                </View>                             */}
+                            {/* <View style={styles.addToCarBtn}>
+                                <Text>Add</Text>
+                            <Icon name="plus" size={10} color={'white'} />
+                            </View> */}
+                            
+                        {/* </View> */}
+                    </View>
+                </View>
+                )
+            }}
+        />
+        <View style={styles.navBar}>
+            <View style={styles.leftContainer}>
+                <Text style={[styles.text, {textAlign: 'left',color:'white',fontSize:18,textAlignVertical:'center'}]}>1 item |<Image resizeMode='contain'  source={require('../../assets/images/currency_w.png')} />601   
+                {/* <Icon name="rupee" size={20} style={{letterSpacing:10}}/> */}
+                <Image resizeMode='contain'  source={require('../../assets/images/currency_w.png')} />
+                <Text style={{textDecorationLine:'line-through'}}>827</Text></Text>
+            </View>
+            <View style={styles.rightContainer}>
+                <Text style={{color:'white',fontSize:18}}>View Cart <Image resizeMode='contain' source={require('../../assets/images/cart.png')} /></Text>
+            </View>
+        </View>
+
+    </View>
+    );
 }
 
 const styles = StyleSheet.create({
     
     flatbox:{
         flex:1,
-        padding: 15,   
+        
         backgroundColor:'white',
         borderRadius:4,
     },  
 
     picker: {
-        width: '60%',
+        width: '67%',
         color: "#F04E23",
     },
 
-    content:{
-        paddingLeft: 8,        
+    // content:{
+    //     paddingLeft: 8,        
         
-    },
+    // },
 
     content_box:{
         flex:1,
@@ -151,18 +175,20 @@ const styles = StyleSheet.create({
     image:{
         marginLeft: 25,
         marginRight: 25,    
-        flexDirection: 'row'
+        flexDirection: 'row',
+        height:55
     },
     
     content_text:{
         paddingTop: 15,        
-        paddingLeft: 8,
+        paddingLeft: 15,
         flexDirection: 'row'
     },
 
     amount:{
-        paddingLeft: 2,
-        flexDirection: 'row'
+        paddingLeft: 12,
+        flexDirection: 'row',
+       
     },
     addToCarBtn:{
         height:30,
@@ -171,46 +197,56 @@ const styles = StyleSheet.create({
         backgroundColor: "#F04E23",
         justifyContent: 'center',
         alignItems: 'center'
-    }
-    // subtext: {
-    //     paddingLeft: 15,
-    //     justifyContent: 'space-between',
-    // },
+    },
 
-    // button:{
-    //     flex: 1,
-    //     width:'100%',
+
+    box:{
+      
+        width:'100%',
+        height: '20%',          
+        padding: 20
+    },
+    inner:{
+        color: '#fff',
+        height: '50%', 
+        backgroundColor: "#F04E23",
         
-    // }
+    },
+    cartText:{
+        padding: 10,
+        flex:1,
+        flexDirection: 'row',
+    },
 
-    
+    navBar: {
+        height: 50,
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        backgroundColor: "#F04E23",
+        marginBottom: 50,
+        padding: 10,
+        borderRadius: 6,
+        
+      },
+      leftContainer: {
+        flex: 1,
+        flexDirection: 'row',
+        justifyContent: 'flex-start',
 
-    // container:{
-    //     flex:1,
-    //     width:'100%',
-    //     height:'25%',
-    //     padding: 5,
-    //     flexDirection: 'row',
-    //     flexWrap: 'wrap',
-    // },
-    // box:{
-    //     width: '50%',
-    //     height: '30%',
-    //     padding: 5,
-    //     borderColor: 'red',
-    //     borderRadius: 4,
-    //     borderStyle: 'solid'
-    // },
-    // inner: {
-    //     flex: 1,
-    //     padding: 15,
-    // },
-    // textTitle:{
-    //     marginTop: 20
-    // },
-    // textSubtitle:{
-    //     marginTop: 5,
-    //     color: '#F04E23',
-    // },
+      },
+      rightContainer: {
+        flex: 1,
+        flexDirection: 'row',
+        justifyContent: 'flex-end',
+        alignItems: 'center',
+      },
+      rightIcon: {
+        height: 10,
+        width: 10,
+        resizeMode: 'contain',
+        backgroundColor: 'white',
+      }
+
 
 })
