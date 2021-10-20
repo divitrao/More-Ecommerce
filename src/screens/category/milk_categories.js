@@ -1,16 +1,14 @@
 import React, { useState } from 'react';
 import { StyleSheet, View, Text } from 'react-native';
-import Header from '../../components/Categories/header';
-import Categories from '../../components/Categories/categories';
 import Milk_Categories from '../../components/Categories/milk_category';
 
-export default function Category({navigation}) {
+export default function Milk_Category({navigation}) {
   
 
   return (
     <View style={styles.container}>
-        <Categories />
         
+        <Milk_Categories />
     </View>
   );
 }

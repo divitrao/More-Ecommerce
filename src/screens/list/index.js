@@ -1,12 +1,20 @@
-import React from "react";
-import { Text, View } from "react-native";
+import React, { useState } from 'react';
+import { StyleSheet, View, Text } from 'react-native';
+import List_Categories from '../../components/Categories/list';
 
-const My_List =()=>{
-    return(
-        <View style={{alignItems:'center',backgroundColor:'#fcc9c5',marginVertical:100,height:50,}}>
-            <Text style={{fontSize:40}}>MY list view</Text>
-        </View>
-    )
+export default function List_Category({navigation}) {
+  
+
+  return (
+    <View style={styles.container}>
+        
+        <List_Categories />
+    </View>
+  );
 }
 
-export default My_List
+const styles = StyleSheet.create({
+    container:{
+        flex:1,
+    },
+})
