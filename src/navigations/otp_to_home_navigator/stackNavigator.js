@@ -7,6 +7,10 @@ import MyTabs from "../bottom_tab_navigator";
 import MobileVerification from "../../screens/MobileOtp/mobileVerification";
 import Namedetails from "../../screens/names/namedetails";
 import Getlocation from "../../screens/location/getLocation";
+import Veggies from "../../screens/category/vegetable";
+import { height } from "styled-system";
+import Custom_header from "../../screens/Custom_Headers";
+import Review_Cart from "../../screens/reviewCart/reviewCart";
 const stacks = createNativeStackNavigator()
 const HomeStack = ()=>{
 
@@ -21,10 +25,16 @@ const HomeStack = ()=>{
                 <stacks.Screen name='Getlocation' options={{headerShown:false}} component={Getlocation} />
                 {/* <stacks.Screen name='home' options={{headerShown:false}} component={Home} /> */}
                 <stacks.Screen name="homos" options={{headerShown:false}} component={MyTabs}  />
+                <stacks.Screen options={({route})=>({headerTitle:route.params[0].header,
+                    header:({navigation,route})=>{
+                        return(
+                            <Custom_header titles={route.params[0].header} navigation={navigation} />
+                        )
+                    }
+                    })}   name="Vegetable_and_Dairy" component={Veggies} />
+                    <stacks.Screen name="review_cart" options={{headerTitle:'Review Cart'}} component={Review_Cart} />
             </stacks.Navigator>
         
     )
 
 }
-
-export default HomeStack
