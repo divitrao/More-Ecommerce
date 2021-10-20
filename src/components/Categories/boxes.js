@@ -1,203 +1,345 @@
 
 import React, { useState } from 'react';
-import { StyleSheet, View, Text, Image, FlatList } from 'react-native';
+import { Dimensions, TouchableOpacity, ViewComponent, StyleSheet,View, } from 'react-native';
+
+import {
+  NativeBaseProvider,
+  Box,
+  Text,
+  Pressable,
+  Heading,
+  IconButton,
+  Icon,
+  HStack,
+  Avatar,
+  VStack,
+  Spacer,
+  Image,
+  Badge,
+  Button,
+  AddIcon,
+  MinusIcon,
+  Input
+} from 'native-base';
+import { SwipeListView } from 'react-native-swipe-list-view';
+import categoriesStyles from './styles/categories_styles';
 import { Picker } from '@react-native-picker/picker';
-import { Button } from 'react-native-elements';
-import Icon from 'react-native-vector-icons/FontAwesome';
+
+export default function App() {
+  const [mode, setMode] = useState('Basic');
+ 
+  return (
+    <NativeBaseProvider>
+        <Basic />
+        
+    </NativeBaseProvider>
+  );
+}
+
+function Basic() {
+    const[cartValue, setCartValue] = useState([])   
 
 
-
-
-
-export default function Boxes() {
-
-    const [selectedLanguage, setSelectedLanguage] = useState();
-
-    const food_data = [
+    
+    const data = [
         {
             id:1,
-            image: require('../../assets/images/apple.png'),
-            content:'Red Apple',
+            image: require('../../assets/images/image_1.png'),
+            content:'OPP Sooji 500gm Pouch',
             colors:'#53B175',
-            amount: '240',
-            quantity:['1kg','2kg']
+            actual_amount: 33,
+            discount_amount: 19,
+            discount_perc: '42%', 
+            quantity:['1kg','2kg'],
+            rating_perc: 3.8,
+            rating_count: 29108,
+            is_vegan: false
         },
         {
             id:2,
-            image: require('../../assets/images/banana.png'),
-            content: 'Banana',
+            image: require('../../assets/images/image_2.png'),
+            content: 'Aashirvaad Superior MP Wheat Atta',
             colors:'#53B175',
-            amount: '240',
-            quantity:['1kg','2kg']
+            actual_amount: 109,
+            discount_amount: 98,
+            discount_perc: '10%',
+            quantity:['1kg','2kg'],
+            rating_perc: 4.3,
+            rating_count: 62191,
+            is_vegan: true
         },
         {
             id:3,
-            image: require('../../assets/images/capcicum.png'),
-            content:'Capcicum Red',
+            image: require('../../assets/images/image_3.png'),
+            content:'Aashirvaad Sharbati Select Atta',
             colors:'#53B175',
-            amount: '140',
-            quantity:['1kg','2kg']
+            actual_amount: 315,
+            discount_amount: 293,
+            discount_perc: '7%',
+            quantity:['1kg','2kg'],
+            rating_perc: 3.8,
+            rating_count: 29102,
+            is_vegan: false
+
         },
+
         {
             id:4,
-            image: require('../../assets/images/ginger.png'),
-            content:'Ginger',
+            image: require('../../assets/images/image_3.png'),
+            content:'Aashirvaad Sharbati Select Atta',
             colors:'#53B175',
-            amount: '240',
-            quantity:['1kg','2kg']
+            actual_amount: 315,
+            discount_amount: 293,
+            discount_perc: '7%',
+            quantity:['1kg','2kg'],
+            rating_perc: 3.8,
+            rating_count: 29102,
+            is_vegan: false
+
+        },
+
+        {
+            id:5,
+            image: require('../../assets/images/image_3.png'),
+            content:'Aashirvaad Sharbati Select Atta',
+            colors:'#53B175',
+            actual_amount: 315,
+            discount_amount: 293,
+            discount_perc: '7%',
+            quantity:['1kg','2kg'],
+            rating_perc: 3.8,
+            rating_count: 29102,
+            is_vegan: false
+
         },
         
     ]
 
-    return (
+  const [listData, setListData] = useState(data);
 
-        <View style={{flex:1,backgroundColor:'white',padding:10}}>
+
+    const onIncrementHandler = (item_id) => {
+      const item_exist = cartValue.find((x)=> x['item_id']===item_id);
       
-        <FlatList 
-            columnWrapperStyle={{justifyContent:'space-between'}}
-            style={styles.flatbox}
-            data={food_data}
-            numColumns={2}
-            renderItem={({item})=>{
-            return(
-                <View style={styles.content_box}>
-                    <View>
-                    <Image source={item.image}  style={styles.image} />
-                    </View>
-                    <View style={styles.content}>
-                        <Text style={styles.content_text}>{item.content}</Text>
-                        <Picker style={styles.picker} >
-                            <Picker.Item label="1 Kg" />
-                            <Picker.Item label="2 Kg" />
-                        </Picker>
+      if(item_exist){
+          setCartValue(
+              cartValue.map((x)=>
+                  x['item_id'] === item_id ?{...item_exist, qty: x['qty'] + 1}: x
+              )
+          );
+        }
+      else{
+          setCartValue([...cartValue,{item_id:item_id, qty: 1}]);
+        }
+    }
 
-                        <View style={[styles.amount],{flexDirection: 'row',alignItems:'baseline',paddingHorizontal:9}}>
-                            <Text style={{fontSize: 17, fontWeight: 'bold',}}>
-                                {/* <Icon name="rupee" size={15} style={{letterSpacing:10}}/> */}
-                                <Image resizeMode='contain'  source={require('../../assets/images/currency_b.png')} />
-                            {item.amount}
-                            </Text>
-                            <View
-                            style={{
-                                height: 25,
-                                width: 65,
-                                backgroundColor: "#F04E23",
-                                borderRadius: 5,
-                                marginLeft: 45,
-                                alignItems: 'center',
-                                justifyContent: 'space-around',
-                            }}>
-                            <Text
-                                style={{fontSize: 17, color: 'white',fontWeight:'400',}}>ADD 
-                                +
-                            </Text>
+
+    const onDecrementHandler = (item_id) => { 
+      const item_exist = cartValue.find((x)=> x['item_id']=== item_id);
+      
+      if(item_exist['qty']===1){
+          setCartValue(
+              cartValue.filter((x) => x['item_id'] !== item_id)
+          );
+      }
+      else{
+          setCartValue(cartValue.map((x)=>
+              x['item_id'] === item_id ? {...item_exist, qty:x['qty'] - 1}: x
+          ));
+      }
+    }
+
+
+
+
+  const renderItem = ({ item, index }) => (
+    <Box height="auto" backgroundColor="white" flex="1"> 
+      <Pressable onPress={() => console.log('You touched me')} bg="white">
+        <Box
+            borderWidth="1"
+            borderRadius="5"
+            borderColor="#E2E2E2"
+            pl="2"
+            pr="1"
+            py="2"
+            marginTop="2"
+            height="auto"
+            style={{marginHorizontal:6}}
+          >
+              <HStack space={6} style={{paddingHorizontal:10}}>
+                <Image source={item.image} style={categoriesStyles.image} alt="Image description"/>
+                    <VStack style={{width:'70%'}}>
+                        <View style={{flexDirection:'row',}}>
+                            <View style={[{flex:1,flexDirection:'row',width:1}]}>
+                                <Text _dark={{color: "warmGray.50",}}  color="coolGray.800" bold style={{fontSize:19}}>
+                                <Image resizeMode='contain' alt="currency" source={require('../../assets/images/currency_b.png')} />{item.discount_amount}
+                                    <Text bold  
+                                    style={{textDecorationLine:'line-through',fontSize:16,color:'#9A9A9A'}}>
+                                        <Image resizeMode='contain' alt="currency"  source={require('../../assets/images/currency_b.png')} /> {item.actual_amount}   
+                                    </Text>
+
+                                </Text>
+                                  <Badge bgColor="#2898FF" justifyContent="center" variant='solid' borderRadius="6" height="7" width="50" marginLeft="4" >
+                                     <Text style={{fontWeight:'bold',color:'white'}}>{item.discount_perc}</Text></Badge>
                             </View>
+                            
                         </View>
-                    </View>
-                </View>
-                )
-            }}
-        />
-        <View style={styles.navBar}>
-            <View style={styles.leftContainer}>
-                <Text style={[styles.text, {textAlign: 'left',color:'white',fontSize:18,textAlignVertical:'center'}]}>1 item |<Image resizeMode='contain'  source={require('../../assets/images/currency_w.png')} />601   
-                {/* <Icon name="rupee" size={20} style={{letterSpacing:10}}/> */}
-                <Image resizeMode='contain'  source={require('../../assets/images/currency_w.png')} />
-                <Text style={{textDecorationLine:'line-through'}}>827</Text></Text>
-            </View>
-            <View style={styles.rightContainer}>
-                <Text style={{color:'white',fontSize:18}}>View Cart <Image resizeMode='contain' source={require('../../assets/images/cart.png')} /></Text>
-            </View>
-        </View>
-
-    </View>
-    );
-}
-const styles = StyleSheet.create({
-    
-    flatbox:{
-        flex:1,
-        
-        backgroundColor:'white',
-        borderRadius:4,
-    },  
-
-    picker: {
-        width: '67%',
-        color: "#F04E23",
-    },
-
-    // content:{
-    //     paddingLeft: 8,        
-        
-    // },
-
-    content_box:{
-        flex:1,
-        width:160,
-        height:200,
-        borderWidth:1,
-        marginHorizontal:5,
-        marginVertical:5,
-        paddingTop:23,
-        borderColor: '#E2E2E2'
-    },
-
-    image:{
-        marginLeft: 25,
-        marginRight: 25,    
-        flexDirection: 'row',
-        height:55
-    },
-    
-    content_text:{
-        paddingTop: 15,        
-        paddingLeft: 15,
-        flexDirection: 'row'
-    },
-
-    amount:{
-        paddingLeft: 12,
-        flexDirection: 'row',
-       
-    },
-    addToCarBtn:{
-        height:30,
-        width:80,
-        marginLeft: 50,
-        backgroundColor: "#F04E23",
-        justifyContent: 'center',
-        alignItems: 'center'
-    },
 
 
-    box:{
+                        <Text _dark={{color: "warmGray.50",}} color="coolGray.800" bold style={{width:200,fontSize:15,color:'#9A9A9A',}}>
+                            {item.content}                            
+                        </Text>
+                        
+                        {item.is_vegan && <View style={{marginVertical:10,height:20}}>
+                            <Image resizeMode='contain' alt="vegan"  source={require('../../assets/images/vegan.png')} /> 
+                        </View>}
+                        
+                        <View style={{paddingTop:10,}}>
+                        <Text style={{color:"#24AF8E"}} bold>
+                        <Image resizeMode='contain' alt="star" source={require('../../assets/images/star.png')} /> 
+                           {item.rating_perc} <Text style={{color:'#9A9A9A'}}> {item.rating_count} Ratings</Text>
+                        </Text>
+                        </View>
+                        
+                        <View  style={{flexDirection:'row',alignItems:'center'}}>
+                        <View style={[{flex:1,flexDirection:'row',width:1}]}>
+                            <Picker style={{width:'100%',borderWidth:10,borderColor:'#F04E23'}}>
+                                <Picker.Item label="1 Kg" />
+                                <Picker.Item label="2 Kg" />
+                            </Picker>
+                        
+                        </View>
+                        {console.log(cartValue,"2")}
+                        {console.log(cartValue['qty'],"111")}
+                        {cartValue.length == 0  && <View style={{flex:1,alignItems:'flex-end'}}>
+                       <Button
+                            rightIcon={<AddIcon size="4" />}
+                            bgColor="#F04E23"
+                            onPress={()=>onIncrementHandler(item.id)}
+                            style={{width:'65%',justifyContent:'space-around'}}
+                            >
+                        ADD
+                        </Button>
+                        
+                        </View> }
+                      
+
+                        {(() => {
+                       
+                       
+                       if (cartValue.length > 0)
+                       {
+                         return (
+                        
+                          <View style={[{flex:1,flexDirection:'row',width:1,height:29,justifyContent:'center'}]}>
+                          <Button style={{width:'23%',justifyContent:'center',alignItems:'center', backgroundColor:'#F04E23'}}
+                              onPress={()=>onDecrementHandler(item.id)}>
+                              <MinusIcon size='3' style={{flex:1,flexDirection:'row',color:'white'}}/></Button>
+                          <Input
+                              value={cartValue[0]['qty'].toString()}
+                              showSoftInputOnFocus={false}
+                              mx="0"
+                              w={{
+                                  base: "45%",
+                              }}
+                              style={{height:29,textAlign:'center'}}
+                              
+                              />
+                          <Button  style={{width:'23%',justifyContent:'space-around',  backgroundColor:'#F04E23'}}
+                              onPress={()=>onIncrementHandler(item.id)}>
+                              <AddIcon size="3" style={{flex:1,flexDirection:'row',color:'white'}}/></Button>
+                          </View>
+                          )
+                        }
+                         })()}
+
+                        </View>
+                 
+
+                         
+                    </VStack>
+                    </HStack>
+        </Box>
+      </Pressable>
+    </Box>
+  );
+
+  const renderHiddenItem = (data, rowMap) => (
+    <HStack flex="1" pl="3">
+      <Pressable
+        w="160"
+        ml="auto"
+     
+        bg="#24AF8E"
+        justifyContent="center"
+        h="100%"
+        marginTop="2">
+        <VStack alignItems="center" space={4}>
       
-        width:'100%',
-        height: '20%',          
-        padding: 20
-    },
-    inner:{
-        color: '#fff',
-        height: '50%', 
-        backgroundColor: "#F04E23",
-        
-    },
-    cartText:{
-        padding: 10,
-        flex:1,
-        flexDirection: 'row',
-    },
+        <Image source={require('../../assets/images/list.png')} alt="Image description" style={{marginLeft:20}}/>
+          <Text  fontWeight="medium" color="white" style={{marginLeft:20}} >
+            Add to my list
+          </Text>
+        </VStack>
+      </Pressable>
+    </HStack>
+  );
 
-    navBar: {
+  return (
+    <Box bg="white" safeArea flex="1" style={{marginHorizontal:2,borderWidth:2}}>
+      <SwipeListView
+        data={listData}
+        renderItem={renderItem}
+        renderHiddenItem={renderHiddenItem}
+        rightOpenValue={-130}
+        previewRowKey={'0'}
+        previewOpenValue={-40}
+        previewOpenDelay={3000}
+      />
+
+    {cartValue.length > 0 &&
+      <View style={{
+          position:'absolute',
+          bottom:25,
+          left:20,
+          right:20,
+          elevation:0,
+          backgroundColor:'#F04E23',
+          borderRadius:5,
+          height:60
+          }}>
+            <View style={styles.navBar}>
+               <View style={styles.leftContainer}>
+                   <Text style={[styles.text, {textAlign: 'left',color:'white',fontSize:14,textAlignVertical:'center'}]}>{cartValue[0]['qty']} item |
+                   <Image resizeMode='contain' alt="currency" source={require('../../assets/images/currency_w.png')} />601   
+                   {/* <Icon name="rupee" size={20} style={{letterSpacing:10}}/> */}
+                   <Image resizeMode='contain' alt="currency"  source={require('../../assets/images/currency_w.png')} />
+                   <Text style={{color:'white',textDecorationLine:'line-through'}}>827</Text></Text>
+               </View>
+               <View style={styles.rightContainer}>
+                   <Text style={{color:'white',fontSize:17}}>View Cart  <Image resizeMode='contain' source={require('../../assets/images/cart.png')} alt="cart" /></Text>
+               </View>
+           </View>
+      </View>
+      }
+    </Box>
+  );
+}
+
+
+
+const styles=StyleSheet.create({
+      navBar: {
+       
         height: 50,
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
         backgroundColor: "#F04E23",
-        marginBottom: 50,
+        // marginBottom: 50,
         padding: 10,
         borderRadius: 6,
+        marginHorizontal:15,
         
       },
       leftContainer: {
@@ -219,184 +361,4 @@ const styles = StyleSheet.create({
         backgroundColor: 'white',
       }
 
-
 })
-
-
-    
-//   return (
-
-//         <View style={{flex:1,backgroundColor:'white',marginRight:-15,paddingHorizontal:20}}>
-//         <View  style={{flex:1}} >
-//         <FlatList 
-            
-//             style={styles.flatbox}
-//             data={food_data}
-//             numColumns={2}
-//             renderItem={({item})=>{
-//             return(
-//                 <View style={styles.content_box}>
-//                     <View>
-//                     <Image source={item.image}  style={styles.image} />
-//                     </View>
-//                     <View style={styles.content}>
-//                         <Text style={styles.content_text}>{item.content}</Text>
-//                         <Picker style={styles.picker} >
-//                             <Picker.Item label="1 Kg" />
-//                             <Picker.Item label="2 Kg" />
-//                         </Picker>
-
-//                         <View style={[styles.amount],{flexDirection: 'row',alignItems:'baseline'}}>
-//                             <Text style={{fontSize: 17, fontWeight: 'bold',}}>
-//                                 {/* <Icon name="rupee" size={15} style={{letterSpacing:10}}/> */}
-//                                 <Image resizeMode='contain'  source={require('../../assets/images/currency_b.png')} />
-//                             {item.amount}
-//                             </Text>
-//                             <View
-//                             style={{
-//                                 height: 25,
-//                                 width: 65,
-//                                 backgroundColor: "#F04E23",
-//                                 borderRadius: 5,
-//                                 marginLeft: 30,
-//                                 alignItems: 'center',
-//                                 justifyContent: 'space-around',
-//                             }}>
-//                             <Text
-//                                 style={{fontSize: 17, color: 'white',fontWeight:'400',}}>ADD 
-//                                 +
-//                             </Text>
-//                             </View>
-//                         </View>
-//                     </View>
-//                 </View>
-//                 )
-//             }}
-//         />
-//         </View>
-//         <View style={styles.navBar}>
-//             <View style={styles.leftContainer}>
-//                 <Text style={[styles.text, {textAlign: 'left',color:'white',fontSize:14,textAlignVertical:'center'}]}>1 item |<Image resizeMode='contain'  source={require('../../assets/images/currency_w.png')} />601   
-//                 {/* <Icon name="rupee" size={20} style={{letterSpacing:10}}/> */}
-//                 <Image resizeMode='contain'  source={require('../../assets/images/currency_w.png')} />
-//                 <Text style={{color:'white',textDecorationLine:'line-through'}}>827</Text></Text>
-//             </View>
-//             <View style={styles.rightContainer}>
-//                 <Text style={{color:'white',fontSize:17}}>View Cart <Image resizeMode='contain' source={require('../../assets/images/cart.png')} /></Text>
-//             </View>
-//         </View>
-
-//     </View>
-//     );
-// }
-
-// const styles = StyleSheet.create({
-    
-//     flatbox:{
-//         flex:1,
-        
-//         backgroundColor:'white',
-//         borderRadius:4,
-//     },  
-
-//     picker: {
-//         width: '80%',
-//         color: "#F04E23",
-//     },
-
-//     // content:{
-//     //     paddingLeft: 8,        
-        
-//     // },
-
-//     content_box:{
-//         flex:1,
-//         width:160,
-//         height:200,
-//         borderWidth:1,
-//         marginHorizontal:5,
-//         marginVertical:5,
-//         paddingTop:23,
-//         borderColor: '#E2E2E2'
-//     },
-
-//     image:{
-//         marginLeft: 25,
-//         marginRight: 25,    
-//         flexDirection: 'row',
-//         height:55
-//     },
-    
-//     content_text:{
-//         paddingTop: 15,        
-//         paddingLeft: 15,
-//         flexDirection: 'row'
-//     },
-
-//     amount:{
-//         paddingLeft: 12,
-//         flexDirection: 'row',
-       
-//     },
-//     addToCarBtn:{
-//         height:30,
-//         width:80,
-//         marginLeft: 50,
-//         backgroundColor: "#F04E23",
-//         justifyContent: 'center',
-//         alignItems: 'center'
-//     },
-
-
-//     box:{
-      
-//         width:'100%',
-//         height: '20%',          
-//         padding: 20
-//     },
-//     inner:{
-//         color: '#fff',
-//         height: '50%', 
-//         backgroundColor: "#F04E23",
-        
-//     },
-//     cartText:{
-//         padding: 10,
-//         flex:1,
-//         flexDirection: 'row',
-//     },
-
-//     navBar: {
-       
-//         height: 50,
-//         flexDirection: 'row',
-//         justifyContent: 'space-between',
-//         alignItems: 'center',
-//         backgroundColor: "#F04E23",
-//         // marginBottom: 50,
-//         padding: 10,
-//         borderRadius: 6,
-//         marginHorizontal:15,
-        
-//       },
-//       leftContainer: {
-//         flex: 1,
-//         flexDirection: 'row',
-//         justifyContent: 'flex-start',
-
-//       },
-//       rightContainer: {
-//         flex: 1,
-//         flexDirection: 'row',
-//         justifyContent: 'flex-end',
-//         alignItems: 'center',
-//       },
-//       rightIcon: {
-//         height: 10,
-//         width: 10,
-//         resizeMode: 'contain',
-//         backgroundColor: 'white',
-//       }
-
-
-// })

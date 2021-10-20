@@ -14,7 +14,8 @@ function TopTabNavigation(){
             tabBarLabelStyle: {fontSize:12},
             tabBarScrollEnabled: true,
             tabBarIndicatorStyle: {color:'#F04E23'},
-            tabBarIndicatorContainerStyle: {color:'#F04E23'},
+            tabBarIndicatorContainerStyle: {color:'#F04E23',justifyContent:'center'},
+            swipeEnabled:false
             
             
           }}>
